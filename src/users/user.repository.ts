@@ -12,22 +12,22 @@ export class UserRepository {
     return this.prisma.user.create({ data: createUserDto });
   }
 
-  findAll() {
+  async findAll() {
     return this.prisma.user.findMany();
   }
 
-  findOneById(id: string) {
+  async findOneById(id: string) {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({
       where: { id },
       data: updateUserDto,
     });
   }
 
-  delete(id: string) {
+  async delete(id: string) {
     return this.prisma.user.delete({ where: { id } });
   }
 }

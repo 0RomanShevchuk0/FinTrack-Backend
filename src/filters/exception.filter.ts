@@ -3,16 +3,13 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-	Catch
+  Catch,
 } from '@nestjs/common';
 import { Response } from 'express';
 
 @Catch()
 export class ExceptionsFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
-    console.log(
-      '===========================AllExceptionFilter====================================',
-    );
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status =
