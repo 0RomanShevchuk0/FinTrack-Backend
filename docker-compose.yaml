@@ -16,7 +16,6 @@ services:
     restart: always
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/node_modules
     command: yarn start
 
   db:
