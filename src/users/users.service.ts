@@ -1,3 +1,4 @@
+import { plainToInstance } from 'class-transformer';
 import { UserResponseDto } from './dto/user-response.dto';
 import { UserRepository } from './user.repository';
 import { Injectable } from '@nestjs/common';
@@ -20,17 +21,30 @@ export class UsersService {
       email: createUserDto.email,
       password: hashedPassword,
     });
-    return transformToDto(user, UserResponseDto);
+
+    if (!user) return null;
+
+    return transformToDto(UserResponseDto, user);
   }
 
-  async findAll() {
+  async findAll(): Promise<UserResponseDto[]> {
     const users = await this.UserRepository.findAll();
-    return transformToDto(users, UserResponseDto);
+    return plainToInstance(UserResponseDto, users, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async findOne(id: string) {
+  async findOneById(id: string) {
     const user = await this.UserRepository.findOneById(id);
-    return transformToDto(user, UserResponseDto);
+
+    if (!user) return null;
+
+    return transformToDto(UserResponseDto, user);
+  }
+
+  async getFullOneByEmail(email: string) {
+    const user = await this.UserRepository.findOneByEmail(email);
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -40,11 +54,14 @@ export class UsersService {
       email: updateUserDto.email,
     });
 
-    return transformToDto(user, UserResponseDto);
+    return transformToDto(UserResponseDto, user);
   }
 
   async remove(id: string) {
     const user = await this.UserRepository.delete(id);
-    return transformToDto(user, UserResponseDto);
+
+    if (!user) return null;
+
+    return transformToDto(UserResponseDto, user);
   }
 }

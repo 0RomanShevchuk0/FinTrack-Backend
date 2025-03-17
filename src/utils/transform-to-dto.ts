@@ -1,7 +1,5 @@
-import { plainToInstance } from 'class-transformer';
+import { plainToInstance, ClassConstructor } from 'class-transformer';
 
-export function transformToDto(entity: any, dto: any) {
-  return plainToInstance(dto, entity, {
-    excludeExtraneousValues: true,
-  });
+export function transformToDto<T>(dto: ClassConstructor<T>, entity: object): T {
+  return plainToInstance(dto, entity, { excludeExtraneousValues: true });
 }
