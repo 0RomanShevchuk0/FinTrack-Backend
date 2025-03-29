@@ -15,6 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { AuthGuard } from '@nestjs/passport';
 import { RequestWithUser } from 'src/types/request-with-user';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -26,9 +27,8 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
+  @Auth()
   findAll(@Request() req: RequestWithUser) {
-    console.log(' UsersControllerfindAll req.user:', req.user.userId);
     return this.usersService.findAll();
   }
 

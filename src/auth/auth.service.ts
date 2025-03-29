@@ -26,7 +26,7 @@ export class AuthService {
     return { user, accessToken, refreshToken };
   }
 
-  async register() {}
+  async register(email: string, password: string) {}
 
   async validateUser(email: string, password: string) {
     const user = await this.usersService.getFullOneByEmail(email);
