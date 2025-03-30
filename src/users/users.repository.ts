@@ -8,10 +8,6 @@ import { User } from '@prisma/client';
 export class UsersRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User | null> {
-    return this.prisma.user.create({ data: createUserDto });
-  }
-
   async findAll(): Promise<User[]> {
     return this.prisma.user.findMany();
   }
@@ -22,6 +18,10 @@ export class UsersRepository {
 
   async findOneByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({ where: { email } });
+  }
+
+  async create(createUserDto: CreateUserDto): Promise<User | null> {
+    return this.prisma.user.create({ data: createUserDto });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

@@ -11,22 +11,6 @@ import { UsersRepository } from './users.repository';
 export class UsersService {
   constructor(private UserRepository: UsersRepository) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
-
-    const user = await this.UserRepository.create({
-      firstName: createUserDto.firstName,
-      lastName: createUserDto.lastName,
-      email: createUserDto.email,
-      password: hashedPassword,
-    });
-
-    if (!user) return null;
-
-    return transformToDto(UserResponseDto, user);
-  }
-
   async findAll(): Promise<UserResponseDto[]> {
     const users = await this.UserRepository.findAll();
     return plainToInstance(UserResponseDto, users, {
@@ -45,6 +29,22 @@ export class UsersService {
   async getFullOneByEmail(email: string) {
     const user = await this.UserRepository.findOneByEmail(email);
     return user;
+  }
+
+  async create(createUserDto: CreateUserDto) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+
+    const user = await this.UserRepository.create({
+      firstName: createUserDto.firstName,
+      lastName: createUserDto.lastName,
+      email: createUserDto.email,
+      password: hashedPassword,
+    });
+
+    if (!user) return null;
+
+    return transformToDto(UserResponseDto, user);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

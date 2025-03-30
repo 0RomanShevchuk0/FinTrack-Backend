@@ -8,16 +8,16 @@ import { UpdateCurrencyDto } from './dto/update-currency.dto';
 export class CurrenciesRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(createCurrencyDto: CreateCurrencyDto): Promise<Currency | null> {
-    return this.prisma.currency.create({ data: createCurrencyDto });
-  }
-
   async findAll(): Promise<Currency[]> {
     return this.prisma.currency.findMany();
   }
 
   async findOneById(id: string): Promise<Currency | null> {
     return this.prisma.currency.findUnique({ where: { id } });
+  }
+
+  async create(createCurrencyDto: CreateCurrencyDto): Promise<Currency | null> {
+    return this.prisma.currency.create({ data: createCurrencyDto });
   }
 
   async update(id: string, updateCurrencyDto: UpdateCurrencyDto) {
