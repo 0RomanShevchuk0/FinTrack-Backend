@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 
 @Injectable()
-export class UserRepository {
+export class UsersRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto): Promise<User | null> {

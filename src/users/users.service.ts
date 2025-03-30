@@ -1,15 +1,15 @@
 import { plainToInstance } from 'class-transformer';
 import { UserResponseDto } from './dto/user-response.dto';
-import { UserRepository } from './user.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { transformToDto } from 'src/utils/transform-to-dto';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private UserRepository: UserRepository) {}
+  constructor(private UserRepository: UsersRepository) {}
 
   async create(createUserDto: CreateUserDto) {
     const salt = await bcrypt.genSalt(10);
