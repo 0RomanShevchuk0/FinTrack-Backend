@@ -1,6 +1,5 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -17,6 +16,95 @@ model User {
   firstName String?
   lastName  String?
 
+  assets       Asset[]
+  categories   Category[]
+  transactions Transaction[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Currency {
+  id String @id @default(uuid())
+
+  name   String
+  code   String
+  symbol String
+
+  assets Asset[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum AssetType {
+  WALLET
+  CARD
+  BANK_ACCOUNT
+  LOAN
+  OTHER
+}
+
+model Asset {
+  id String @id @default(uuid())
+
+  name    String
+  balance Decimal @db.Decimal(12, 2)
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  currency_id String
+  currency    Currency @relation(fields: [currency_id], references: [id], onDelete: Restrict)
+
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Category {
+  id String @id @default(uuid())
+
+  type        TransactionType
+  name        String
+  description String?
+
+  transactions Transaction[]
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id String @id @default(uuid())
+
+  type        TransactionType
+  amount      Decimal         @db.Decimal(12, 2)
+  description String?
+  date        DateTime        @default(now())
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  asset_id String
+  assets   Asset  @relation(fields: [asset_id], references: [id], onDelete: Cascade)
+
+  category_id String
+  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([user_id])
+  @@index([asset_id])
+  @@index([category_id])
 }
