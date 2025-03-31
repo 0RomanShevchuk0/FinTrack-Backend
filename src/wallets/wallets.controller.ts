@@ -21,12 +21,12 @@ export class WalletsController {
 
   @Get()
   findAll(@Request() req: RequestWithUser) {
-    return this.walletsService.findUserWallets(req.user.userId);
+    return this.walletsService.findAllForUser(req.user.userId);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string, @Request() req: RequestWithUser) {
-    return this.walletsService.findOne(id, req.user.userId);
+    return this.walletsService.findOneForUser(id, req.user.userId);
   }
 
   @Post()
@@ -34,7 +34,7 @@ export class WalletsController {
     @Body() createWalletDto: CreateWalletDto,
     @Request() req: RequestWithUser,
   ) {
-    return this.walletsService.create(createWalletDto, req.user.userId);
+    return this.walletsService.createForUser(createWalletDto, req.user.userId);
   }
 
   @Patch(':id')
@@ -43,11 +43,11 @@ export class WalletsController {
     @Body() updateWalletDto: UpdateWalletDto,
     @Request() req: RequestWithUser,
   ) {
-    return this.walletsService.update(id, updateWalletDto, req.user.userId);
+    return this.walletsService.updateForUser(id, updateWalletDto, req.user.userId);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string, @Request() req: RequestWithUser) {
-    return this.walletsService.remove(id, req.user.userId);
+    return this.walletsService.removeForUser(id, req.user.userId);
   }
 }
