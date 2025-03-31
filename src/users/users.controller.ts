@@ -7,16 +7,15 @@ import {
   Param,
   Delete,
   Request,
-  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { NotFoundException } from '@nestjs/common/exceptions';
-import { AuthGuard } from '@nestjs/passport';
 import { RequestWithUser } from 'src/types/request-with-user';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 
+@Auth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -27,8 +26,7 @@ export class UsersController {
   }
 
   @Get()
-  @Auth()
-  findAll(@Request() req: RequestWithUser) {
+  findAll() {
     return this.usersService.findAll();
   }
 

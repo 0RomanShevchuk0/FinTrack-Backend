@@ -16,8 +16,5 @@ export class CreateWalletDto {
   balance: number;
 
   @IsUUID()
-  user_id: string;
-
-  @IsUUID()
   currency_id: string;
 }

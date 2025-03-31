@@ -7,23 +7,23 @@ import { UpdateWalletDto } from './dto/update-wallet.dto';
 export class WalletsService {
   constructor(private walletsRepository: WalletsRepository) {}
 
-  findAll() {
-    return this.walletsRepository.findAll();
+  findUserWallets(userId: string) {
+    return this.walletsRepository.findAll(userId);
   }
 
-  findOne(id: string) {
-    return this.walletsRepository.findOneById(id);
+  findOne(id: string, userId: string) {
+    return this.walletsRepository.findOneById(id, userId);
   }
 
-  create(createWalletDto: CreateWalletDto) {
-    return this.walletsRepository.create(createWalletDto);
+  create(createWalletDto: CreateWalletDto, userId: string) {
+    return this.walletsRepository.create(createWalletDto, userId);
   }
 
-  update(id: string, updateWalletDto: UpdateWalletDto) {
-    return this.walletsRepository.update(id, updateWalletDto);
+  update(id: string, updateWalletDto: UpdateWalletDto, userId: string) {
+    return this.walletsRepository.update(id, updateWalletDto, userId);
   }
 
-  remove(id: string) {
-    return this.walletsRepository.delete(id);
+  remove(id: string, userId: string) {
+    return this.walletsRepository.delete(id, userId);
   }
 }
