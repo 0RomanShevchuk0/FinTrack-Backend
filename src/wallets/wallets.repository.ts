@@ -25,7 +25,11 @@ export class WalletsRepository {
     });
   }
 
-  async updateForUser(id: string, updateWalletDto: UpdateWalletDto, userId: string) {
+  async updateForUser(
+    id: string,
+    updateWalletDto: UpdateWalletDto,
+    userId: string,
+  ) {
     return this.prisma.wallet.update({
       where: { id, user_id: userId },
       data: updateWalletDto,

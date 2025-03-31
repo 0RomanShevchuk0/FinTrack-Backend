@@ -40,13 +40,14 @@ model Currency {
 enum WalletType {
   WALLET
   CARD
-  BANK_ACCOUNT
   LOAN
   OTHER
 }
 
 model Wallet {
   id String @id @default(uuid())
+
+  type WalletType
 
   name    String
   balance Decimal @db.Decimal(12, 2)

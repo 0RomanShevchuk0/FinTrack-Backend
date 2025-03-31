@@ -43,7 +43,11 @@ export class WalletsController {
     @Body() updateWalletDto: UpdateWalletDto,
     @Request() req: RequestWithUser,
   ) {
-    return this.walletsService.updateForUser(id, updateWalletDto, req.user.userId);
+    return this.walletsService.updateForUser(
+      id,
+      updateWalletDto,
+      req.user.userId,
+    );
   }
 
   @Delete(':id')

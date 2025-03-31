@@ -1,8 +1,21 @@
 -- CreateEnum
-CREATE TYPE "AssetType" AS ENUM ('WALLET', 'CARD', 'BANK_ACCOUNT', 'LOAN', 'OTHER');
+CREATE TYPE "WalletType" AS ENUM ('WALLET', 'CARD', 'LOAN', 'OTHER');
 
 -- CreateEnum
 CREATE TYPE "TransactionType" AS ENUM ('INCOME', 'EXPENSE');
+
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "firstName" TEXT,
+    "lastName" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Currency" (
@@ -17,8 +30,9 @@ CREATE TABLE "Currency" (
 );
 
 -- CreateTable
-CREATE TABLE "Asset" (
+CREATE TABLE "Wallet" (
     "id" TEXT NOT NULL,
+    "type" "WalletType" NOT NULL,
     "name" TEXT NOT NULL,
     "balance" DECIMAL(12,2) NOT NULL,
     "user_id" TEXT NOT NULL,
@@ -26,7 +40,7 @@ CREATE TABLE "Asset" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Asset_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Wallet_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -50,7 +64,7 @@ CREATE TABLE "Transaction" (
     "description" TEXT,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "user_id" TEXT NOT NULL,
-    "asset_id" TEXT NOT NULL,
+    "wallet_id" TEXT NOT NULL,
     "category_id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -59,19 +73,22 @@ CREATE TABLE "Transaction" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
 CREATE INDEX "Transaction_user_id_idx" ON "Transaction"("user_id");
 
 -- CreateIndex
-CREATE INDEX "Transaction_asset_id_idx" ON "Transaction"("asset_id");
+CREATE INDEX "Transaction_wallet_id_idx" ON "Transaction"("wallet_id");
 
 -- CreateIndex
 CREATE INDEX "Transaction_category_id_idx" ON "Transaction"("category_id");
 
 -- AddForeignKey
-ALTER TABLE "Asset" ADD CONSTRAINT "Asset_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Wallet" ADD CONSTRAINT "Wallet_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Asset" ADD CONSTRAINT "Asset_currency_id_fkey" FOREIGN KEY ("currency_id") REFERENCES "Currency"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Wallet" ADD CONSTRAINT "Wallet_currency_id_fkey" FOREIGN KEY ("currency_id") REFERENCES "Currency"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Category" ADD CONSTRAINT "Category_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -80,7 +97,7 @@ ALTER TABLE "Category" ADD CONSTRAINT "Category_user_id_fkey" FOREIGN KEY ("user
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_asset_id_fkey" FOREIGN KEY ("asset_id") REFERENCES "Asset"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_wallet_id_fkey" FOREIGN KEY ("wallet_id") REFERENCES "Wallet"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
